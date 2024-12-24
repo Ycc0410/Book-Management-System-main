@@ -26,12 +26,6 @@ BookTracker 是一個現代化的個人書籍管理系統，提供直覺的使�
 - **HTTP 客戶端**: Fetch API
 - **認證管理**: JWT Token
 
-檔案結構：
-frontend/
-├── src/
-│   ├── components/    # React 組件
-│   ├── pages/        # 頁面組件
-│   └── context/      # React Context
 ### 後端 (Backend)
 - **執行環境**: Node.js
 - **框架**: Express.js
@@ -40,12 +34,7 @@ frontend/
 - **認證**: JWT (JSON Web Tokens)
 - **密碼加密**: bcrypt
 
-檔案結構：
-backend/
-├── models/          # 資料模型
-├── routes/         # API 路由
-├── middleware/     # 中間件
-└── server.js       # 主程式
+
 ## 系統需求
 - Node.js >= 14.0.0
 - MongoDB >= 4.0
