@@ -30,30 +30,73 @@ const auth = async (req, res, next) => {
   }
 };
 
-// 登入路由
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    console.log('Login attempt:', { username }); // 調試日誌
 
+    // 查找用戶
+    const user = await User.findOne({ username });
     if (!user) {
+      console.log('User not found:', username); // 調試日誌
       return res.status(400).json({ message: '用戶名或密碼錯誤' });
     }
 
+    // 驗證密碼
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Attempting password match:', { isMatch }); // 調試日誌
+
     if (!isMatch) {
       return res.status(400).json({ message: '用戶名或密碼錯誤' });
     }
 
+    // 生成 token，包含更多用戶資訊
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      JWT_SECRET
+      {
+        userId: user._id.toString(),
+        username: user.username,
+        role: user.role
+      },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '24h' }
     );
 
-    res.json({ token });
+    console.log('Login successful for:', username); // 調試日誌
+    res.json({
+      token,
+      user: {
+        username: user.username,
+        role: user.role
+      }
+    });
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Login error:', error); // 調試日誌
     res.status(500).json({ message: '服務器錯誤' });
+  }
+});
+// 註冊路由
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // 檢查用戶名是否已存在
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: '用戶名已存在' });
+    }
+
+    // 創建新用戶
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      username,
+      password: hashedPassword,
+      role: 'user'  // 預設為一般用戶
+    });
+
+    await user.save();
+    res.status(201).json({ message: '註冊成功' });
+  } catch (error) {
+    res.status(500).json({ message: '註冊失敗' });
   }
 });
 

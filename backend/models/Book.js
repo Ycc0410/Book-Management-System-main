@@ -1,3 +1,4 @@
+// models/Book.js
 import mongoose from 'mongoose';
 
 const bookSchema = new mongoose.Schema({
@@ -17,6 +18,11 @@ const bookSchema = new mongoose.Schema({
     type: String,
     enum: ['unread', 'reading', 'completed'],
     default: 'unread'
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 });
 

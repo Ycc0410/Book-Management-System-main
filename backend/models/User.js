@@ -1,4 +1,3 @@
-// models/User.js
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
@@ -19,14 +18,12 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// 在保存前加密密碼
-userSchema.pre('save', async function(next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-  next();
-});
+// 移除 pre save hook，避免重複加密
+// userSchema.pre('save', async function(next) {...});
 
-const User = mongoose.model('User', userSchema);
+// 添加比對密碼的方法
+userSchema.methods.comparePassword = async function(password) {
+  return bcrypt.compare(password, this.password);
+};
 
-export default User;
+export default mongoose.model('User', userSchema);
