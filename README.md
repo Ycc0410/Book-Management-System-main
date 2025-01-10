@@ -18,6 +18,8 @@ BookTracker 是一個現代化的個人書籍管理系統，提供直覺的使�
 - 個人書籍資料隱私保護
 
 ## 系統架構
+### 系統架構圖 (非AI生成)![架構圖](https://github.com/user-attachments/assets/d2801f6c-6a3e-41dd-bd19-1bf5538a6b91)
+### 系統流程圖 (非AI生成)![流程圖](https://github.com/user-attachments/assets/cfcc8488-c470-4661-88d9-85052732eb6e)
 ### 前端 (Frontend)
 - **框架**: React 18 + Vite
 - **UI 框架**: Tailwind CSS
